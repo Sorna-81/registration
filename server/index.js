@@ -17,8 +17,18 @@ const app = express()
 const PORT = process.env.PORT || 4000
 const MONGO_URI = process.env.MONGODB_URI
 
-const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173']
-app.use(cors({ origin: allowedOrigins }))
+const allowedOrigins = process.env.CLIENT_ORIGINS
+  ? process.env.CLIENT_ORIGINS.split(',').map((s) => s.trim())
+  : ['http://localhost:5173', 'http://127.0.0.1:5173']
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true)
+      if (allowedOrigins.includes(origin)) return callback(null, true)
+      return callback(new Error('Not allowed by CORS'))
+    },
+  }),
+)
 app.use(express.json({
   verify: (req, res, buf, encoding) => {
     if (buf && buf.length) {

@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: registration-server
+    env: node
+    plan: free
+    branch: main
+    region: oregon
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      # Set MONGODB_URI as a Render secret and reference it here in the dashboard
+      # - key: MONGODB_URI
+      #   fromSecret: MONGODB_URI
+
+  - type: static
+    name: registration-client
+    env: static
+    branch: main
+    region: oregon
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: client/dist
