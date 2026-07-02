@@ -4,7 +4,9 @@ node_modules/
 dist/
 client/dist/
 .env
-.env.*
+# allow example env files to be committed
+!.env.example
+!server/.env.example
 npm-debug.log*
 package-lock.json
 .DS_Store
